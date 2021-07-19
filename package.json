@@ -13,6 +13,7 @@
     "node": "14.x"
   },
   "dependencies": {
-    "express": "^4.17.1"
+    "express": "^4.17.1",
+    "@agrimolizzi/logger": "1.0.0"
   }
 }

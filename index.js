@@ -1,11 +1,12 @@
-const express = require('express')
-const app = express()
+const logger = require('@agrimolizzi/logger')()
+const app = require('express')()
+
 const port = process.env.PORT || 3000
 
 app.get('/', (_, response) => {
-  response.send('Cani Cani Grossi Cani')
+  response.send('Cani Cani Bei Cani')
 })
 
 app.listen(port, () => {
-  console.log(`Example app listening on port: ${port}`)
+  logger.info(`Example app listening on port: ${port}`)
 })
