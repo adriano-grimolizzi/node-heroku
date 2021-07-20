@@ -2,9 +2,10 @@
   "name": "heroku",
   "version": "1.0.0",
   "description": "",
-  "main": "index.js",
+  "main": "app.js",
   "scripts": {
-    "start": "node index.js",
+    "nodemon": "nodemon",
+    "start": "node app.js",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "author": "Adriano Grimolizzi",
@@ -13,7 +14,11 @@
     "node": "14.x"
   },
   "dependencies": {
+    "@agrimolizzi/logger": "1.0.0",
     "express": "^4.17.1",
-    "@agrimolizzi/logger": "1.0.0"
+    "express-handlebars": "^5.3.2"
+  },
+  "devDependencies": {
+    "nodemon": "^2.0.12"
   }
 }
