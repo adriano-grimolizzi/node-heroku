@@ -10,7 +10,9 @@ const port = process.env.PORT || 3000
 
 const mongoose = require('mongoose')
 
-mongoose.connect('mongodb://localhost:27017/test', { useNewUrlParser: true, useUnifiedTopology: true })
+const mongoDbUri = process.env.MONGODB_URI || 'mongodb://localhost:27017/test'
+
+mongoose.connect(mongoDbUri, { useNewUrlParser: true, useUnifiedTopology: true })
 
 const Dog = mongoose.model('Dog', {
   name: String,
