@@ -50,14 +50,14 @@ app.post('/dogs', (request, res) => {
 
   if (includesSwearWords(body.name)) {
     res.redirect('/swear-words')
+  } else {
+    Dog.create(body).then((dog) => {
+      console.log(dog)
+      res.redirect('/dogs')
+    }).catch((err) => {
+      console.error(err)
+    })
   }
-
-  Dog.create(body).then((dog) => {
-    console.log(dog)
-    res.redirect('/dogs')
-  }).catch((err) => {
-    console.error(err)
-  })
 })
 
 app.listen(port, () => {
