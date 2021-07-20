@@ -1,6 +1,7 @@
 const app = require('express')()
 const exphbs = require('express-handlebars')
 const bodyParser = require('body-parser')
+const includesSwearWords = require('./utils')
 
 app.engine('handlebars', exphbs({ defaultLayout: 'main' }))
 app.set('view engine', 'handlebars')
@@ -40,8 +41,18 @@ app.get('/dogs/new', (_, response) => {
   response.render('dogs-new', {})
 })
 
-app.post('/dogs', (req, res) => {
-  Dog.create(req.body).then((dog) => {
+app.get('/swear-words', (_, response) => {
+  response.render('swear-words', {})
+})
+
+app.post('/dogs', (request, res) => {
+  const { body } = request
+
+  if (includesSwearWords(body.name)) {
+    res.redirect('/swear-words')
+  }
+
+  Dog.create(body).then((dog) => {
     console.log(dog)
     res.redirect('/dogs')
   }).catch((err) => {
