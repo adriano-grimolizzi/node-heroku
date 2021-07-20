@@ -1,25 +1,40 @@
 const app = require('express')()
+const { response } = require('express')
 const exphbs = require('express-handlebars')
-const logger = require('@agrimolizzi/logger')()
 
 app.engine('handlebars', exphbs({ defaultLayout: 'main' }))
 app.set('view engine', 'handlebars')
 
 const port = process.env.PORT || 3000
 
-app.get('/', (_, response) => {
-  response.render('home', { msg: 'Cani Cani Bei Cani!'})
+const mongoose = require('mongoose')
+
+mongoose.connect('mongodb://localhost:27017/dogs', { useNewUrlParser: true, useUnifiedTopology: true })
+
+const Dog = mongoose.model('Dog', {
+  name: String,
+  height: Number
 })
 
-const dogs = [
-  { name: "Fido", height: 1.40 },
-  { name: "Rex", height: 1.45 }
-]
+app.get('/', (_, response) => {
+  response.render('home', { msg: 'Cani Cani Bei Cani!' })
+})
 
 app.get('/dogs', (_, response) => {
-  response.render('dogs-index', { dogs: dogs })
+  Dog.find({})
+    .then(dogs => {
+      console.log(dogs)
+      response.render('dogs-index', { dogs: dogs })
+    })
+    .catch(err => {
+      console.log(err)
+    })
+})
+
+app.get('/dogs/new', (_, response) => {
+  response.render('dogs-new', {})
 })
 
 app.listen(port, () => {
-  logger.info(`Example app listening on port: ${port}`)
+  console.log(`Example app listening on port: ${port}`)
 })
