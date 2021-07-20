@@ -1,15 +1,16 @@
 const app = require('express')()
-const { response } = require('express')
 const exphbs = require('express-handlebars')
+const bodyParser = require('body-parser')
 
 app.engine('handlebars', exphbs({ defaultLayout: 'main' }))
 app.set('view engine', 'handlebars')
+app.use(bodyParser.urlencoded({ extended: true }))
 
 const port = process.env.PORT || 3000
 
 const mongoose = require('mongoose')
 
-mongoose.connect('mongodb://localhost:27017/dogs', { useNewUrlParser: true, useUnifiedTopology: true })
+mongoose.connect('mongodb://localhost:27017/test', { useNewUrlParser: true, useUnifiedTopology: true })
 
 const Dog = mongoose.model('Dog', {
   name: String,
@@ -22,7 +23,9 @@ app.get('/', (_, response) => {
 
 app.get('/dogs', (_, response) => {
   Dog.find({})
+    .lean() // gets a JSON object instead of a mongoose one
     .then(dogs => {
+      console.log('Retrieved from DB:')
       console.log(dogs)
       response.render('dogs-index', { dogs: dogs })
     })
@@ -33,6 +36,15 @@ app.get('/dogs', (_, response) => {
 
 app.get('/dogs/new', (_, response) => {
   response.render('dogs-new', {})
+})
+
+app.post('/dogs', (req, res) => {
+  Dog.create(req.body).then((dog) => {
+    console.log(dog)
+    res.redirect('/dogs')
+  }).catch((err) => {
+    console.error(err)
+  })
 })
 
 app.listen(port, () => {
